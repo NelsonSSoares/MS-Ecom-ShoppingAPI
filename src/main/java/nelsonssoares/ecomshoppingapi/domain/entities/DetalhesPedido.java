@@ -3,6 +3,7 @@ package nelsonssoares.ecomshoppingapi.domain.entities;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import nelsonssoares.ecomshoppingapi.clients.entities.Produto;
@@ -10,6 +11,7 @@ import nelsonssoares.ecomshoppingapi.clients.entities.Produto;
 import java.math.BigDecimal;
 
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
