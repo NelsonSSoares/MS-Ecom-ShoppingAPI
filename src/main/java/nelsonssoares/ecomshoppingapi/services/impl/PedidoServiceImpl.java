@@ -1,5 +1,6 @@
 package nelsonssoares.ecomshoppingapi.services.impl;
 
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.RequiredArgsConstructor;
 import nelsonssoares.ecomshoppingapi.domain.dtos.PedidoDTO;
 import nelsonssoares.ecomshoppingapi.domain.entities.Pedido;
@@ -14,6 +15,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PedidoServiceImpl implements PedidoService {
     @Override
+    @CircuitBreaker(name = "saveOrder", fallbackMethod = "saveFallback")
     public ResponseEntity<Pedido> save(PedidoDTO pedidoDto) {
         return null;
     }

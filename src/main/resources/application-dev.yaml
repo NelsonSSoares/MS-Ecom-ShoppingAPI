@@ -6,7 +6,7 @@ spring:
     hibernate:
       ddl-auto: update
   application:
-    name: user-api
+    name: shopping-api
   datasource:
     password: '12345'
     username: root
@@ -15,4 +15,4 @@ server:
   error:
     include-stacktrace: never
     include-exception: 'false'
-  port: ${PORT:0}
+  port: ${PORT:0} #8082
