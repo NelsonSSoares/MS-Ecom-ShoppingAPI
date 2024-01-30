@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 @Component
-@FeignClient
+@FeignClient(name = "${feign.user-api.name}", url = "${feign.user-api.url}")
 public interface UsuarioClient {
 
-    @GetMapping("{/id}")
+    @GetMapping("/{id}")
     ResponseEntity<Usuario> findById(@PathVariable("id") Integer id);
 }
