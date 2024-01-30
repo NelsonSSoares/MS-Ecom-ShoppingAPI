@@ -1,12 +1,14 @@
-#eureka:
-#  instance:
-#    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
-#  client:
-#    register-with-eureka: 'true'
-#    service-url:
-#      defaultZone: http://localhost:8761/eureka
-#    fetch-registry: 'true'
+eureka:
+  instance:
+    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+  client:
+    register-with-eureka: 'true'
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+    fetch-registry: 'true'
 spring:
+  profiles:
+    active: dev #{PROFILE_ACTIVE}
   jpa:
     properties:
       hibernate:
@@ -14,7 +16,7 @@ spring:
     hibernate:
       ddl-auto: update
   application:
-    name: user-api
+    name: shopping-api
   datasource:
     password: '12345'
     username: root
