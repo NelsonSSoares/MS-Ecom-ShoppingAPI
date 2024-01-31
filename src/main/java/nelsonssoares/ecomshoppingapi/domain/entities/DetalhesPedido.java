@@ -21,8 +21,8 @@ public class DetalhesPedido {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
-    @JoinColumn(name = "produto")
-    private Produto produto;
+    @NotNull(message = "Id do Produto deve ser informado")
+    private Integer produto;
 
     @NotNull(message = "Este campo não pode ser nulou, deve conter números positivos!")
     private Integer quantidade;

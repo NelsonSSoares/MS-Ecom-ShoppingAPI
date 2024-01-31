@@ -23,9 +23,8 @@ public class Pedido {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
-    @OneToOne
-    @JoinColumn(name = "id")
-    private Usuario usuario;
+    @NotNull(message = "Id do Usuario deve ser informado")
+    private Integer usuarioId;
 
     @Column(name = "data_criacao")
     private LocalDate dataCriacao;
@@ -44,4 +43,7 @@ public class Pedido {
 
     @OneToMany(mappedBy = "id")
     private List<DetalhesPedido> detalhesPedido;
+
+    @NotNull(message = "Id do Endereco deve ser informado")
+    private Integer enderecoId;
 }
