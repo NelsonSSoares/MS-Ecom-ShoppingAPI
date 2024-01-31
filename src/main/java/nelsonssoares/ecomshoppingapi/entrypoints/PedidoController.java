@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import nelsonssoares.ecomshoppingapi.domain.dtos.PedidoDTO;
+import nelsonssoares.ecomshoppingapi.domain.dtos.PedidoResponse;
 import nelsonssoares.ecomshoppingapi.domain.entities.Pedido;
 import nelsonssoares.ecomshoppingapi.services.PedidoService;
 import org.springframework.http.HttpStatus;
@@ -34,7 +35,7 @@ public class PedidoController {
     })
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<Pedido> save(@RequestBody @Valid PedidoDTO dto) {
+    public ResponseEntity<PedidoResponse> save(@RequestBody @Valid PedidoDTO dto) {
         return pedidoService.save(dto);
     }
 

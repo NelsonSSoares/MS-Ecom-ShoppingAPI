@@ -21,6 +21,10 @@ feign:
   user-api:
     name: user-api #EcomUserApi
     url: http://localhost:8765/ecommerce/usuarios/
+
   product-api:
     name: product-api #EcomProductsApi
     url: http://localhost:8765/ecommerce/produtos/
+  endereco-api:
+    name: user-api #EcomUserApi
+    url: http://localhost:8765/ecommerce/usuarios/endereco/usuario

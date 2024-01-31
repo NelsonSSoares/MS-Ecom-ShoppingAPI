@@ -4,12 +4,17 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import nelsonssoares.ecomshoppingapi.clients.ProdutoClient;
 import nelsonssoares.ecomshoppingapi.clients.UsuarioClient;
+import nelsonssoares.ecomshoppingapi.clients.entities.Endereco;
 import nelsonssoares.ecomshoppingapi.clients.entities.Produto;
 import nelsonssoares.ecomshoppingapi.clients.entities.Usuario;
+import nelsonssoares.ecomshoppingapi.domain.dtos.DetalhesPedidoResponse;
 import nelsonssoares.ecomshoppingapi.domain.dtos.PedidoDTO;
+import nelsonssoares.ecomshoppingapi.domain.dtos.PedidoResponse;
 import nelsonssoares.ecomshoppingapi.domain.entities.DetalhesPedido;
 import nelsonssoares.ecomshoppingapi.domain.entities.Pedido;
+import nelsonssoares.ecomshoppingapi.domain.enums.PerguntaAtivo;
 import nelsonssoares.ecomshoppingapi.domain.enums.StatusPedido;
+import nelsonssoares.ecomshoppingapi.domain.repositories.DetalhesPedidoRepository;
 import nelsonssoares.ecomshoppingapi.domain.repositories.PedidoRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,19 +26,19 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class SaveOrder {
 
     private final PedidoRepository pedidoRepository;
+    private final DetalhesPedidoRepository detalhesPedidoRepository;
     private final ObjectMapper objectMapper;
     private final UsuarioClient usuarioClient;
     private final ProdutoClient produtoClient;
 
     @Transactional
-    public Pedido executeSaveOrder(PedidoDTO pedidoDto) {
+    public PedidoResponse executeSaveOrder(PedidoDTO pedidoDto) {
         Pedido pedido = objectMapper.convertValue(pedidoDto, Pedido.class);
 
         ResponseEntity<Usuario> usuario = usuarioClient.findById(pedidoDto.usuarioId());
@@ -41,34 +46,55 @@ public class SaveOrder {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Usuario não encontrado");
         }
 
-        System.out.println(usuario);
-
-        pedido.setUsuario(usuario.getBody());
+        ResponseEntity<List<Endereco>> enderecos = usuarioClient.findAddressByUserId(pedidoDto.usuarioId());
+        Endereco endereco = enderecos.getBody().stream().filter(end -> end.getEnderecoPadrao().equals(PerguntaAtivo.SIM)).findFirst().orElse(null);
+        if(endereco == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Endereço não encontrado");
+        }
+        pedido.setEnderecoId(endereco.getId());
+        pedido.setUsuarioId(usuario.getBody().getId());
         List<DetalhesPedido> detalhes = new ArrayList<>();
+        List<DetalhesPedidoResponse> detalhesPedidoResponse = new ArrayList<>();
         pedidoDto.detalhesPedidoDTO().forEach(detalhe -> {
-
             ResponseEntity<Produto> produtoResponse = produtoClient.findById(detalhe.produtoId());
             if(produtoResponse.getBody() == null || !produtoResponse.hasBody()) {
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Produto não encontrado");
             }
             Produto produto = produtoResponse.getBody();
             System.out.println(produto);
+            detalhesPedidoResponse.add(DetalhesPedidoResponse.builder()
+
+                    .produto(produto)
+                    .quantidade(detalhe.quantidade())
+                    .precoTotal(produto.getValorUnitario().multiply(BigDecimal.valueOf(detalhe.quantidade())))
+                    .build());
 
             BigDecimal valorTotal = produto != null ? produto.getValorUnitario().multiply(BigDecimal.valueOf(detalhe.quantidade())) : null;
             System.out.println(valorTotal);
             detalhes.add(DetalhesPedido.builder()
-                    .produto(produto)
+                    .produto(produto.getId())
                     .quantidade(detalhe.quantidade())
                     .precoTotal(valorTotal)
                     .build());
         });
+
         pedido.setDetalhesPedido(detalhes);
         pedido.setDataCriacao(LocalDate.now());
         pedido.setDataModificacao(LocalDate.now());
         pedido.setStatusPedido(StatusPedido.AGPAGAMENTO);
         pedido.setTotalPedido(detalhes.stream().map(DetalhesPedido::getPrecoTotal).reduce(BigDecimal.ZERO, BigDecimal::add));
+        detalhesPedidoRepository.saveAll(detalhes);
+        pedidoRepository.save(pedido);
 
-        return pedidoRepository.save(pedido);
+        return PedidoResponse.builder()
+                .id(pedido.getId())
+                .dataCriacao(pedido.getDataCriacao())
+                .statusPedido(pedido.getStatusPedido())
+                .totalPedido(pedido.getTotalPedido())
+                .endereco(endereco)
+                .usuario(usuario.getBody())
+                .detalhesPedidoResponse(detalhesPedidoResponse)
+                .build();
     }
 
 }
