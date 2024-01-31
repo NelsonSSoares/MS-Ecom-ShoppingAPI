@@ -23,9 +23,8 @@ public class Pedido {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
-//    @NotEmpty(message = "O Usuario deve ser Informado!")
-//    private Integer usuarioId;
-    @NotEmpty(message = "O Usuario deve ser Informado!")
+    @OneToOne
+    @JoinColumn(name = "id")
     private Usuario usuario;
 
     @Column(name = "data_criacao")
