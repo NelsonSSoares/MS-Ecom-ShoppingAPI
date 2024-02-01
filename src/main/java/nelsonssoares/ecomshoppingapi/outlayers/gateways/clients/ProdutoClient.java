@@ -1,7 +1,6 @@
-package nelsonssoares.ecomshoppingapi.clients;
+package nelsonssoares.ecomshoppingapi.outlayers.gateways.clients;
 
-import nelsonssoares.ecomshoppingapi.clients.entities.Produto;
-import nelsonssoares.ecomshoppingapi.commons.constants.ClientConstants;
+import nelsonssoares.ecomshoppingapi.outlayers.gateways.clients.entities.Produto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;

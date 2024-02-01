@@ -1,4 +1,4 @@
-package nelsonssoares.ecomshoppingapi.entrypoints;
+package nelsonssoares.ecomshoppingapi.outlayers.entrypoints;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
