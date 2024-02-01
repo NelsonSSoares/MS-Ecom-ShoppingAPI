@@ -1,7 +1,7 @@
 package nelsonssoares.ecomshoppingapi.domain.dtos;
 
 import lombok.Builder;
-import nelsonssoares.ecomshoppingapi.clients.entities.Produto;
+import nelsonssoares.ecomshoppingapi.outlayers.gateways.clients.entities.Produto;
 
 import java.math.BigDecimal;
 

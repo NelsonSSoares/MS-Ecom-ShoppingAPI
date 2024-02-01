@@ -1,8 +1,8 @@
 package nelsonssoares.ecomshoppingapi.domain.dtos;
 
 import lombok.Builder;
-import nelsonssoares.ecomshoppingapi.clients.entities.Endereco;
-import nelsonssoares.ecomshoppingapi.clients.entities.Usuario;
+import nelsonssoares.ecomshoppingapi.outlayers.gateways.clients.entities.Endereco;
+import nelsonssoares.ecomshoppingapi.outlayers.gateways.clients.entities.Usuario;
 import nelsonssoares.ecomshoppingapi.domain.enums.StatusPedido;
 
 import java.math.BigDecimal;

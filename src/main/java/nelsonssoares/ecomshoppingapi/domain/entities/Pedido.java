@@ -1,12 +1,11 @@
 package nelsonssoares.ecomshoppingapi.domain.entities;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import nelsonssoares.ecomshoppingapi.clients.entities.Usuario;
 import nelsonssoares.ecomshoppingapi.domain.enums.StatusPedido;
 
 import java.math.BigDecimal;
@@ -37,6 +36,7 @@ public class Pedido {
     @Column(name = "status_pedido")
     private StatusPedido statusPedido;
 
+    @PositiveOrZero(message = "Total do Pedido deve ser informado! Numero Positivo!")
     @NotNull(message = "Total do Pedido deve ser informado! Numero Positivo!")
     @Column(name ="total_pedido", precision = 20, scale = 2, length = 100)
     private BigDecimal totalPedido;

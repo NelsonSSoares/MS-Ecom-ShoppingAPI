@@ -1,4 +1,4 @@
-package nelsonssoares.ecomshoppingapi.clients.entities;
+package nelsonssoares.ecomshoppingapi.outlayers.gateways.clients.entities;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
