@@ -7,6 +7,7 @@ import nelsonssoares.ecomshoppingapi.domain.dtos.PedidoResponse;
 import nelsonssoares.ecomshoppingapi.domain.entities.Pedido;
 import nelsonssoares.ecomshoppingapi.domain.enums.StatusPedido;
 import nelsonssoares.ecomshoppingapi.services.PedidoService;
+import nelsonssoares.ecomshoppingapi.usecases.GetOrderById;
 import nelsonssoares.ecomshoppingapi.usecases.SaveOrder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,7 @@ import java.util.List;
 public class PedidoServiceImpl implements PedidoService {
 
     private final SaveOrder saveOrder;
+    private final GetOrderById getOrderById;
 
     @Override
     @CircuitBreaker(name = "saveOrder", fallbackMethod = "saveFallback")
@@ -38,8 +40,11 @@ public class PedidoServiceImpl implements PedidoService {
     }
 
     @Override
-    public ResponseEntity<Pedido> findOrderById(Integer id) {
-        return null;
+    public ResponseEntity<PedidoResponse> findOrderById(Integer id) {
+
+        PedidoResponse pedido = getOrderById.executeGetOrderById(id);
+
+        return ResponseEntity.status(HttpStatus.OK).body(pedido);
     }
 
     @Override

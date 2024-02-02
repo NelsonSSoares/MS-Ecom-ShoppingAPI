@@ -15,7 +15,7 @@ public interface PedidoService {
 
     ResponseEntity<Pedido> cancelOrder(Integer id);
 
-    ResponseEntity<Pedido> findOrderById(Integer id);
+    ResponseEntity<PedidoResponse> findOrderById(Integer id);
 
     ResponseEntity<List<Pedido>> findOrderByUserId(Integer id);
 
