@@ -9,4 +9,6 @@ public class ControllerConstants {
     public static final String API_PRODUCES = "application/json";
     public static final String API_SECURITY_REQUIREMENT = "bearer-key";
     public static final String API_BASE_URL = "/ecommerce/shopping";
+
+    public static final String ID = "/{id}";
 }

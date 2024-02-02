@@ -41,7 +41,7 @@ public class Pedido {
     @Column(name ="total_pedido", precision = 20, scale = 2, length = 100)
     private BigDecimal totalPedido;
 
-    @OneToMany(mappedBy = "id")
+    @OneToMany(fetch = FetchType.LAZY, targetEntity = DetalhesPedido.class)
     private List<DetalhesPedido> detalhesPedido;
 
     @NotNull(message = "Id do Endereco deve ser informado")

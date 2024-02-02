@@ -39,4 +39,18 @@ public class PedidoController {
         return pedidoService.save(dto);
     }
 
+    @Operation(summary = "Metodo para buscar pedido por ID", method = "GET")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Busca realizada com sucesso!!"),
+            @ApiResponse(responseCode = "400", description = "Parametros inválidos!"),
+            @ApiResponse(responseCode = "401", description = "Usuário não autenticado!"),
+            @ApiResponse(responseCode = "422", description = "Dados de requisição inválido"),
+            @ApiResponse(responseCode = "500", description = "Erro no Servidor!"),
+    })
+    @GetMapping(ID)
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<PedidoResponse> findOrderById(@PathVariable("id") Integer id) {
+        return pedidoService.findOrderById(id);
+    }
+
 }
