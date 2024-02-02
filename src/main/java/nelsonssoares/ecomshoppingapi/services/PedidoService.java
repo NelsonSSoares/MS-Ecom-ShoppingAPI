@@ -11,13 +11,13 @@ import java.util.List;
 public interface PedidoService {
     ResponseEntity<PedidoResponse> save(PedidoDTO pedidoDto);
 
-    ResponseEntity<Pedido> updateOrder(Integer id, Pedido pedido);
+    ResponseEntity<PedidoResponse> updateOrder(Integer id, Pedido pedido);
 
-    ResponseEntity<Pedido> cancelOrder(Integer id);
+    ResponseEntity<PedidoResponse> cancelOrder(Integer id);
 
     ResponseEntity<PedidoResponse> findOrderById(Integer id);
 
-    ResponseEntity<List<Pedido>> findOrderByUserId(Integer id);
+    ResponseEntity<List<PedidoResponse>> findOrderByUserId(Integer id);
 
-    ResponseEntity<List<Pedido>> findOrderByStats(StatusPedido status);
+    ResponseEntity<List<PedidoResponse>> findOrderByStats(StatusPedido status);
 }

@@ -11,5 +11,5 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Builder
-public record PedidoResponse(Integer id, Usuario usuario, LocalDate dataCriacao, LocalDate dataModificacao, StatusPedido statusPedido, BigDecimal totalPedido, List<DetalhesPedido> detalhesPedido, Endereco endereco) {
+public record PedidoResponse(Integer id, Usuario usuario, LocalDate dataCriacao, LocalDate dataModificacao, StatusPedido statusPedido, BigDecimal totalPedido, List<DetalhesPedidoResponse> detalhesPedido, Endereco endereco) {
 }

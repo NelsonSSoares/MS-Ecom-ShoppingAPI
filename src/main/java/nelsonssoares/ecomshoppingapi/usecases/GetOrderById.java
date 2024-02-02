@@ -1,13 +1,13 @@
 package nelsonssoares.ecomshoppingapi.usecases;
 
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import nelsonssoares.ecomshoppingapi.domain.dtos.DetalhesPedidoResponse;
 import nelsonssoares.ecomshoppingapi.domain.dtos.PedidoResponse;
 import nelsonssoares.ecomshoppingapi.domain.entities.Pedido;
 import nelsonssoares.ecomshoppingapi.domain.enums.StatusPedido;
 import nelsonssoares.ecomshoppingapi.domain.repositories.PedidoRepository;
+import nelsonssoares.ecomshoppingapi.outlayers.gateways.ProdutoGateway;
 import nelsonssoares.ecomshoppingapi.outlayers.gateways.UsuarioGateway;
 import nelsonssoares.ecomshoppingapi.outlayers.gateways.clients.entities.Endereco;
 import nelsonssoares.ecomshoppingapi.outlayers.gateways.clients.entities.Usuario;
@@ -23,6 +23,7 @@ public class GetOrderById {
 
     private final PedidoRepository pedidoRepository;
     private final UsuarioGateway usuarioGateway;
+    private final ProdutoGateway produtoGateway;
 
 
     public PedidoResponse executeGetOrderById(Integer id) {
@@ -45,13 +46,18 @@ public class GetOrderById {
         }
 
 
+        List<DetalhesPedidoResponse> detalhesPedidoResponse = pedido.getDetalhesPedido().stream().map(detalhe -> DetalhesPedidoResponse.builder()
+                .quantidade(detalhe.getQuantidade())
+                .precoTotal( detalhe.getPrecoTotal())
+       .produto(produtoGateway.findById(detalhe.getProduto())).build()).toList();
+
         return PedidoResponse.builder()
                 .id(pedido.getId())
                 .dataCriacao(pedido.getDataCriacao())
                 .dataModificacao(pedido.getDataModificacao())
                 .statusPedido(pedido.getStatusPedido())
                 .totalPedido(pedido.getTotalPedido())
-                .detalhesPedido(pedido.getDetalhesPedido())
+                .detalhesPedido(detalhesPedidoResponse)
                 .usuario(usuario)
                 .endereco(endereco)
                 .build();

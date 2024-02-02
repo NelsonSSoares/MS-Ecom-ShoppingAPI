@@ -53,11 +53,11 @@ public class SaveOrder {
 
             Produto produto = produtoGateway.findById(detalhe.produtoId());
 
-//            detalhesPedidoResponse.add(DetalhesPedidoResponse.builder()
-//                    .produto(produto)
-//                    .quantidade(detalhe.quantidade())
-//                    .precoTotal(produto.getValorUnitario().multiply(BigDecimal.valueOf(detalhe.quantidade())))
-//                    .build());
+            detalhesPedidoResponse.add(DetalhesPedidoResponse.builder()
+                    .produto(produto)
+                    .quantidade(detalhe.quantidade())
+                    .precoTotal(produto.getValorUnitario().multiply(BigDecimal.valueOf(detalhe.quantidade())))
+                    .build());
 
             BigDecimal valorTotal = produto != null ? produto.getValorUnitario().multiply(BigDecimal.valueOf(detalhe.quantidade())) : null;
             System.out.println(valorTotal);
@@ -84,7 +84,7 @@ public class SaveOrder {
                 .totalPedido(pedido.getTotalPedido())
                 .endereco(endereco)
                 .usuario(usuario)
-                .detalhesPedido(pedido.getDetalhesPedido())
+                .detalhesPedido(detalhesPedidoResponse)
                 .build();
     }
 

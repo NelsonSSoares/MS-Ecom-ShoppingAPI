@@ -8,6 +8,7 @@ import nelsonssoares.ecomshoppingapi.domain.entities.Pedido;
 import nelsonssoares.ecomshoppingapi.domain.enums.StatusPedido;
 import nelsonssoares.ecomshoppingapi.services.PedidoService;
 import nelsonssoares.ecomshoppingapi.usecases.GetOrderById;
+import nelsonssoares.ecomshoppingapi.usecases.GetOrdersByUserId;
 import nelsonssoares.ecomshoppingapi.usecases.SaveOrder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,21 +22,23 @@ public class PedidoServiceImpl implements PedidoService {
 
     private final SaveOrder saveOrder;
     private final GetOrderById getOrderById;
+    private final GetOrdersByUserId getOrdersByUserId;
 
     @Override
     @CircuitBreaker(name = "saveOrder", fallbackMethod = "saveFallback")
     public ResponseEntity<PedidoResponse> save(PedidoDTO pedidoDto) {
         PedidoResponse pedido = saveOrder.executeSaveOrder(pedidoDto);
+
         return ResponseEntity.status(HttpStatus.CREATED).body(pedido);
     }
 
     @Override
-    public ResponseEntity<Pedido> updateOrder(Integer id, Pedido pedido) {
+    public ResponseEntity<PedidoResponse> updateOrder(Integer id, Pedido pedido) {
         return null;
     }
 
     @Override
-    public ResponseEntity<Pedido> cancelOrder(Integer id) {
+    public ResponseEntity<PedidoResponse> cancelOrder(Integer id) {
         return null;
     }
 
@@ -48,12 +51,20 @@ public class PedidoServiceImpl implements PedidoService {
     }
 
     @Override
-    public ResponseEntity<List<Pedido>> findOrderByUserId(Integer id) {
-        return null;
+    public ResponseEntity<List<PedidoResponse>> findOrderByUserId(Integer id) {
+
+        List<PedidoResponse> pedidos = getOrdersByUserId.executeGetOrderByUserId(id);
+
+        return pedidos != null ? ResponseEntity.status(HttpStatus.OK).body(pedidos) : ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
     }
 
     @Override
-    public ResponseEntity<List<Pedido>> findOrderByStats(StatusPedido status) {
+    public ResponseEntity<List<PedidoResponse>> findOrderByStats(StatusPedido status) {
         return null;
+    }
+
+    public ResponseEntity<PedidoResponse> saveFallback(PedidoDTO pedidoDto, Throwable throwable) {
+        System.out.println("Circuit Breaker saveOrder has been opened" + throwable.getMessage());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
     }
 }

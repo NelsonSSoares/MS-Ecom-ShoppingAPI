@@ -11,4 +11,5 @@ public class ControllerConstants {
     public static final String API_BASE_URL = "/ecommerce/shopping";
 
     public static final String ID = "/{id}";
+    public static final String USER_ID = "/usuarios/{id}";
 }
