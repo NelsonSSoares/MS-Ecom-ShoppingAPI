@@ -23,7 +23,6 @@ public class GetOrderById {
 
     private final PedidoRepository pedidoRepository;
     private final UsuarioGateway usuarioGateway;
-    private final ObjectMapper objectMapper;
 
 
     public PedidoResponse executeGetOrderById(Integer id) {
@@ -46,15 +45,13 @@ public class GetOrderById {
         }
 
 
-        List<DetalhesPedidoResponse> detalhesPedidoResponse = pedido.getDetalhesPedido().stream().map(detalhe -> objectMapper.convertValue(detalhe, DetalhesPedidoResponse.class)).toList();
-
         return PedidoResponse.builder()
                 .id(pedido.getId())
                 .dataCriacao(pedido.getDataCriacao())
                 .dataModificacao(pedido.getDataModificacao())
                 .statusPedido(pedido.getStatusPedido())
                 .totalPedido(pedido.getTotalPedido())
-                .detalhesPedidoResponse(detalhesPedidoResponse)
+                .detalhesPedido(pedido.getDetalhesPedido())
                 .usuario(usuario)
                 .endereco(endereco)
                 .build();
