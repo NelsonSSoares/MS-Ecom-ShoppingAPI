@@ -1,7 +1,9 @@
 package nelsonssoares.ecomshoppingapi.usecases;
 
 import lombok.RequiredArgsConstructor;
+import nelsonssoares.ecomshoppingapi.constraints.Constraints;
 import nelsonssoares.ecomshoppingapi.domain.dtos.PedidoResponse;
+import nelsonssoares.ecomshoppingapi.domain.entities.Pedido;
 import nelsonssoares.ecomshoppingapi.domain.enums.StatusPedido;
 import nelsonssoares.ecomshoppingapi.domain.repositories.PedidoRepository;
 import org.springframework.stereotype.Service;
@@ -16,7 +18,11 @@ public class GetOrderByStatus {
 
     public List<PedidoResponse> executeGetOrderByStatus(StatusPedido statusPedido){
 
-        List<PedidoResponse> pedidos = pedidoRepository.findAllByStatusPedido(statusPedido);
+        List<Pedido> pedidos = pedidoRepository.findAllByStatusPedido(statusPedido);
+
+        List<Pedido> pedidosAtivos = Constraints.pedidoAtivoList(pedidos);
+
+        System.out.println(pedidosAtivos);
 
 
         return null;

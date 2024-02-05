@@ -8,6 +8,7 @@ import nelsonssoares.ecomshoppingapi.domain.entities.Pedido;
 import nelsonssoares.ecomshoppingapi.domain.enums.StatusPedido;
 import nelsonssoares.ecomshoppingapi.services.PedidoService;
 import nelsonssoares.ecomshoppingapi.usecases.GetOrderById;
+import nelsonssoares.ecomshoppingapi.usecases.GetOrderByStatus;
 import nelsonssoares.ecomshoppingapi.usecases.GetOrdersByUserId;
 import nelsonssoares.ecomshoppingapi.usecases.SaveOrder;
 import org.springframework.http.HttpStatus;
@@ -23,6 +24,7 @@ public class PedidoServiceImpl implements PedidoService {
     private final SaveOrder saveOrder;
     private final GetOrderById getOrderById;
     private final GetOrdersByUserId getOrdersByUserId;
+    private final GetOrderByStatus getOrderByStatus;
 
     @Override
     @CircuitBreaker(name = "saveOrder", fallbackMethod = "saveFallback")
@@ -60,7 +62,11 @@ public class PedidoServiceImpl implements PedidoService {
 
     @Override
     public ResponseEntity<List<PedidoResponse>> findOrderByStats(StatusPedido status) {
-        return null;
+
+
+        List<PedidoResponse> pedidos = getOrderByStatus.executeGetOrderByStatus(status);
+
+        return pedidos != null ? ResponseEntity.status(HttpStatus.OK).body(pedidos) : ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
     }
 
     public ResponseEntity<PedidoResponse> saveFallback(PedidoDTO pedidoDto, Throwable throwable) {
