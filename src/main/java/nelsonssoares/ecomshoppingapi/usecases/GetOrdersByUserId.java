@@ -2,6 +2,7 @@ package nelsonssoares.ecomshoppingapi.usecases;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import nelsonssoares.ecomshoppingapi.constraints.Constraints;
 import nelsonssoares.ecomshoppingapi.domain.dtos.DetalhesPedidoResponse;
 import nelsonssoares.ecomshoppingapi.domain.dtos.PedidoResponse;
 import nelsonssoares.ecomshoppingapi.domain.entities.DetalhesPedido;
@@ -35,6 +36,7 @@ public class GetOrdersByUserId {
         if (userOrders.isEmpty()) {
             return null;
         }
+        List<Pedido> pedidosAtivos = Constraints.pedidoAtivoList(userOrders);
 
         Usuario usuario = usuarioGateway.findById(id);
 
@@ -50,16 +52,15 @@ public class GetOrdersByUserId {
 
         List<PedidoResponse> pedidos = new ArrayList<>();
 
-        for (Pedido pedido : userOrders) {
-
-
-            List<DetalhesPedidoResponse> detalhesPedidoResponse = pedido.getDetalhesPedido().stream().map(detalhe -> DetalhesPedidoResponse.builder()
-                    .quantidade(detalhe.getQuantidade())
-                    .precoTotal(detalhe.getPrecoTotal())
-                    .produto(produtoGateway.findById(detalhe.getProduto())).build()).toList();
-
-            System.out.println(detalhesPedidoResponse);
-
+        for (Pedido pedido : pedidosAtivos) {
+            List<DetalhesPedidoResponse> detalhesPedidoResponse = new ArrayList<>();
+            for (DetalhesPedido detalhe : pedido.getDetalhesPedido()) {
+                Produto produto = produtoGateway.findById(detalhe.getProduto());
+                detalhesPedidoResponse.add(DetalhesPedidoResponse.builder()
+                        .quantidade(detalhe.getQuantidade())
+                        .precoTotal(detalhe.getPrecoTotal())
+                        .produto(produto).build());
+            }
             pedidos.add(PedidoResponse.builder()
                     .id(pedido.getId())
                     .dataCriacao(pedido.getDataCriacao())
@@ -71,7 +72,30 @@ public class GetOrdersByUserId {
                     .endereco(endereco)
                     .build());
         }
-            return pedidos;
+
+//        for (Pedido pedido : pedidosAtivos) {
+//
+//
+//            List<DetalhesPedidoResponse> detalhesPedidoResponse = pedido.getDetalhesPedido().stream().map(detalhe -> DetalhesPedidoResponse.builder()
+//                    .quantidade(detalhe.getQuantidade())
+//                    .precoTotal(detalhe.getPrecoTotal())
+//                    .produto(produtoGateway.findById(detalhe.getProduto())).build()).toList();
+//
+//            System.out.println(detalhesPedidoResponse);
+//
+//            pedidos.add(PedidoResponse.builder()
+//                    .id(pedido.getId())
+//                    .dataCriacao(pedido.getDataCriacao())
+//                    .dataModificacao(pedido.getDataModificacao())
+//                    .statusPedido(pedido.getStatusPedido())
+//                    .totalPedido(pedido.getTotalPedido())
+//                    .detalhesPedido(detalhesPedidoResponse)
+//                    .usuario(usuario)
+//                    .endereco(endereco)
+//                    .build());
+//        }
+//            return pedidos;
+        return pedidos;
     }
 
 

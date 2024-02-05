@@ -8,6 +8,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import nelsonssoares.ecomshoppingapi.domain.dtos.PedidoDTO;
 import nelsonssoares.ecomshoppingapi.domain.dtos.PedidoResponse;
+import nelsonssoares.ecomshoppingapi.domain.enums.StatusPedido;
 import nelsonssoares.ecomshoppingapi.services.PedidoService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -70,5 +71,21 @@ public class PedidoController {
         //DETALHES PEDIDO RETORNANDO NULO
         return pedidoService.findOrderByUserId(id);
     }
+
+    @Operation(summary = "Metodo para buscar pedido por Status de pedido", method = "GET")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Busca realizada com sucesso!!"),
+            @ApiResponse(responseCode = "400", description = "Parametros inválidos!"),
+            @ApiResponse(responseCode = "401", description = "Usuário não autenticado!"),
+            @ApiResponse(responseCode = "422", description = "Dados de requisição inválido"),
+            @ApiResponse(responseCode = "500", description = "Erro no servidor!"),
+    })
+    @GetMapping(STATUS)
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<List<PedidoResponse>> findOrderByStatus(@RequestParam("status") StatusPedido status) {
+        return pedidoService.findOrderByStats(status);
+    }
+
+    
 
 }

@@ -29,4 +29,8 @@ public class DetalhesPedido {
     @NotNull(message = "Preco deve ser informado! Numero positivo!")
     @Column(name = "preco_total", precision = 20, scale = 2)
     private BigDecimal precoTotal;
+
+//    @ManyToOne
+//    @JoinColumn(name = "pedido_id")
+//    private Pedido pedido;
 }
