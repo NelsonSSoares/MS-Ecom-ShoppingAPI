@@ -1,13 +1,13 @@
 package nelsonssoares.ecomshoppingapi.usecases;
 
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import nelsonssoares.ecomshoppingapi.domain.dtos.DetalhesPedidoResponse;
 import nelsonssoares.ecomshoppingapi.domain.dtos.PedidoDTO;
 import nelsonssoares.ecomshoppingapi.domain.dtos.PedidoResponse;
 import nelsonssoares.ecomshoppingapi.domain.entities.DetalhesPedido;
 import nelsonssoares.ecomshoppingapi.domain.entities.Pedido;
+import nelsonssoares.ecomshoppingapi.domain.repositories.DetalhesPedidoRepository;
 import nelsonssoares.ecomshoppingapi.domain.repositories.PedidoRepository;
 import nelsonssoares.ecomshoppingapi.outlayers.gateways.ProdutoGateway;
 import nelsonssoares.ecomshoppingapi.outlayers.gateways.UsuarioGateway;
@@ -15,6 +15,7 @@ import nelsonssoares.ecomshoppingapi.outlayers.gateways.clients.entities.Enderec
 import nelsonssoares.ecomshoppingapi.outlayers.gateways.clients.entities.Produto;
 import nelsonssoares.ecomshoppingapi.outlayers.gateways.clients.entities.Usuario;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -26,16 +27,18 @@ import java.util.List;
 public class UpdateOrder {
 
     private final PedidoRepository pedidoRepository;
-    //private final ObjectMapper objectMapper;
+    private final DetalhesPedidoRepository detalhesPedidoRepository;
     private final ProdutoGateway produtoGateway;
     private final UsuarioGateway usuarioGateway;
 
+    @Transactional
     public PedidoResponse executeUpdateOrder(Integer id, PedidoDTO pedidoDto) {
 
         Pedido pedido = pedidoRepository.findById(id).orElse(null);
         if (pedido == null) {
             return null;
         }
+        System.out.println("pedido: "+pedido);
 
         Endereco endereco = usuarioGateway.findAddressByUserId(pedidoDto.usuarioId());
         if( endereco == null ){
@@ -75,6 +78,9 @@ public class UpdateOrder {
         pedido.setEnderecoId(endereco.getId());
         pedido.setUsuarioId(usuario.getId());
         pedido.setDataModificacao(LocalDate.now());
+        pedido.setStatusPedido(pedido.getStatusPedido());
+        pedido.setTotalPedido(detalhes.stream().map(DetalhesPedido::getPrecoTotal).reduce(BigDecimal.ZERO, BigDecimal::add));
+        detalhesPedidoRepository.saveAll(detalhes);
         pedidoRepository.save(pedido);
 
         return PedidoResponse.builder()
