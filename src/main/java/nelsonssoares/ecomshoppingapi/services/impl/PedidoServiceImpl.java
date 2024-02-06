@@ -7,10 +7,7 @@ import nelsonssoares.ecomshoppingapi.domain.dtos.PedidoResponse;
 import nelsonssoares.ecomshoppingapi.domain.entities.Pedido;
 import nelsonssoares.ecomshoppingapi.domain.enums.StatusPedido;
 import nelsonssoares.ecomshoppingapi.services.PedidoService;
-import nelsonssoares.ecomshoppingapi.usecases.GetOrderById;
-import nelsonssoares.ecomshoppingapi.usecases.GetOrderByStatus;
-import nelsonssoares.ecomshoppingapi.usecases.GetOrdersByUserId;
-import nelsonssoares.ecomshoppingapi.usecases.SaveOrder;
+import nelsonssoares.ecomshoppingapi.usecases.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -25,18 +22,21 @@ public class PedidoServiceImpl implements PedidoService {
     private final GetOrderById getOrderById;
     private final GetOrdersByUserId getOrdersByUserId;
     private final GetOrderByStatus getOrderByStatus;
+    private final UpdateOrder updateOrder;
 
     @Override
     @CircuitBreaker(name = "saveOrder", fallbackMethod = "saveFallback")
     public ResponseEntity<PedidoResponse> save(PedidoDTO pedidoDto) {
+
         PedidoResponse pedido = saveOrder.executeSaveOrder(pedidoDto);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(pedido);
     }
 
     @Override
-    public ResponseEntity<PedidoResponse> updateOrder(Integer id, Pedido pedido) {
-        return null;
+    public ResponseEntity<PedidoResponse> updateOrder(Integer id, PedidoDTO pedido) {
+        PedidoResponse pedidoResponse = updateOrder.executeUpdateOrder(id, pedido);
+        return pedidoResponse != null ? ResponseEntity.status(HttpStatus.OK).body(pedidoResponse) : ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
     }
 
     @Override
