@@ -8,6 +8,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import nelsonssoares.ecomshoppingapi.domain.dtos.PedidoDTO;
 import nelsonssoares.ecomshoppingapi.domain.dtos.PedidoResponse;
+import nelsonssoares.ecomshoppingapi.domain.entities.Pedido;
 import nelsonssoares.ecomshoppingapi.domain.enums.StatusPedido;
 import nelsonssoares.ecomshoppingapi.services.PedidoService;
 import org.springframework.http.HttpStatus;
@@ -81,8 +82,7 @@ public class PedidoController {
     })
     @GetMapping(STATUS)
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<List<PedidoResponse>> findOrderByStatus(@PathVariable("status") StatusPedido status) {
-        System.out.println("Status: " + status);
+    public ResponseEntity<List<PedidoResponse>> findOrderByStatus(@RequestParam("status") StatusPedido status) {
         return pedidoService.findOrderByStats(status);
     }
 
@@ -96,10 +96,23 @@ public class PedidoController {
     })
     @PutMapping(ID)
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<PedidoResponse> updateOrder(@PathVariable("id") Integer id, @RequestBody @Valid PedidoDTO pedido) {
+    public ResponseEntity<PedidoResponse> updateOrder(@PathVariable("id") Integer id, @RequestBody PedidoDTO pedido) {
         return pedidoService.updateOrder(id, pedido);
     }
 
-    
+    @Operation(summary = "Metodo para atualizar Status do pedido", method = "PATCH")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Pedido atualizado com sucesso!!"),
+            @ApiResponse(responseCode = "400", description = "Parametros inválidos!"),
+            @ApiResponse(responseCode = "401", description = "Usuário não autenticado!"),
+            @ApiResponse(responseCode = "422", description = "Dados de requisição inválido"),
+            @ApiResponse(responseCode = "500", description = "Erro no servidor!"),
+    })
+    @PatchMapping(ID)
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResponseEntity<Pedido> pathOrderStatus(@PathVariable("id") Integer id, @RequestBody Pedido status) {
+        return pedidoService.pathOrderStatus(id, status);
+    }
+
 
 }

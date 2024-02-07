@@ -13,5 +13,5 @@ public class ControllerConstants {
     public static final String ID = "/{id}";
     public static final String USER_ID = "/usuarios/{id}";
 
-    public static final String STATUS = "/status/{status}";
+    public static final String STATUS = "/status";
 }

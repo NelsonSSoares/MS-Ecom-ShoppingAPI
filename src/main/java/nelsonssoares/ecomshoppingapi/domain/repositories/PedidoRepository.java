@@ -16,6 +16,6 @@ public interface PedidoRepository extends JpaRepository<Pedido, Integer> {
     @Query(value = "select * from pedidos p where p.usuario_id = :id", nativeQuery = true)
     List<Pedido> findAllByUsuarioId(@Param("id") Integer id);
 
-    @Query(value = "select * from pedidos p where p.status_pedido = :status", nativeQuery = true)
+    @Query(value = "select * from pedidos p where p.status_pedido like :status%", nativeQuery = true)
     List<Pedido> findAllByStatusPedido(@Param("status") StatusPedido status);
 }

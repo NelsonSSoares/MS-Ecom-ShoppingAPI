@@ -23,11 +23,11 @@ public class PedidoServiceImpl implements PedidoService {
     private final GetOrdersByUserId getOrdersByUserId;
     private final GetOrderByStatus getOrderByStatus;
     private final UpdateOrder updateOrder;
+    private final PatchOrderStatus patchOrderStatus;
 
     @Override
     @CircuitBreaker(name = "saveOrder", fallbackMethod = "saveFallback")
     public ResponseEntity<PedidoResponse> save(PedidoDTO pedidoDto) {
-
         PedidoResponse pedido = saveOrder.executeSaveOrder(pedidoDto);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(pedido);
@@ -37,11 +37,6 @@ public class PedidoServiceImpl implements PedidoService {
     public ResponseEntity<PedidoResponse> updateOrder(Integer id, PedidoDTO pedido) {
         PedidoResponse pedidoResponse = updateOrder.executeUpdateOrder(id, pedido);
         return pedidoResponse != null ? ResponseEntity.status(HttpStatus.OK).body(pedidoResponse) : ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-    }
-
-    @Override
-    public ResponseEntity<PedidoResponse> cancelOrder(Integer id) {
-        return null;
     }
 
     @Override
@@ -67,6 +62,12 @@ public class PedidoServiceImpl implements PedidoService {
         List<PedidoResponse> pedidos = getOrderByStatus.executeGetOrderByStatus(status);
 
         return pedidos != null ? ResponseEntity.status(HttpStatus.OK).body(pedidos) : ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+    }
+
+    @Override
+    public ResponseEntity<Pedido> pathOrderStatus(Integer id, Pedido status) {
+        Pedido pedido = patchOrderStatus.executePathOrderStatus(id, status);
+        return pedido != null ? ResponseEntity.status(HttpStatus.OK).body(pedido) : ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
     }
 
     public ResponseEntity<PedidoResponse> saveFallback(PedidoDTO pedidoDto, Throwable throwable) {
