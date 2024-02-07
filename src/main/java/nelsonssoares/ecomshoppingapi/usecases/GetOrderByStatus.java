@@ -16,13 +16,13 @@ public class GetOrderByStatus {
 
     private final PedidoRepository pedidoRepository;
 
-    public List<PedidoResponse> executeGetOrderByStatus(StatusPedido status){
+    public List<PedidoResponse> executeGetOrderByStatus(StatusPedido statusPedido){
 
-        List<Pedido> pedidos = pedidoRepository.findAllByStatusPedido(status);
+        List<Pedido> pedidos = pedidoRepository.findAllByStatusPedido(statusPedido);
 
         List<Pedido> pedidosAtivos = Constraints.pedidoAtivoList(pedidos);
 
-        System.out.println("usecase:"+pedidosAtivos + " status: "+status + " pedidos: "+pedidos);
+        System.out.println(pedidosAtivos);
 
 
         return null;
