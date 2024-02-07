@@ -13,7 +13,7 @@ public interface PedidoService {
 
     ResponseEntity<PedidoResponse> updateOrder(Integer id, PedidoDTO pedido);
 
-    ResponseEntity<PedidoResponse> cancelOrder(Integer id);
+    ResponseEntity<Pedido> pathOrderStatus(Integer id, Pedido status);
 
     ResponseEntity<PedidoResponse> findOrderById(Integer id);
 
