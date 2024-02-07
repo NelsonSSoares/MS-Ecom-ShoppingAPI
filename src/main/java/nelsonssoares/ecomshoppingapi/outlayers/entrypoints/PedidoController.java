@@ -68,7 +68,6 @@ public class PedidoController {
     @GetMapping(USER_ID)
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<List<PedidoResponse>> findOrderByUserId(@PathVariable("id") Integer id) {
-        //DETALHES PEDIDO RETORNANDO NULO
         return pedidoService.findOrderByUserId(id);
     }
 
@@ -86,6 +85,19 @@ public class PedidoController {
         return pedidoService.findOrderByStats(status);
     }
 
-    
+    @Operation(summary = "Metodo para atualizar pedido", method = "PUT")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Pedido atualizado com sucesso!!"),
+            @ApiResponse(responseCode = "400", description = "Parametros inválidos!"),
+            @ApiResponse(responseCode = "401", description = "Usuário não autenticado!"),
+            @ApiResponse(responseCode = "422", description = "Dados de requisição inválido"),
+            @ApiResponse(responseCode = "500", description = "Erro no servidor!"),
+    })
+    @PutMapping(ID)
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResponseEntity<PedidoResponse> updateOrder(@PathVariable("id") Integer id, @RequestBody PedidoDTO pedido) {
+        return pedidoService.updateOrder(id, pedido);
+    }
+
 
 }

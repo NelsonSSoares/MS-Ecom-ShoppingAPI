@@ -14,8 +14,10 @@ import nelsonssoares.ecomshoppingapi.outlayers.gateways.UsuarioGateway;
 import nelsonssoares.ecomshoppingapi.outlayers.gateways.clients.entities.Endereco;
 import nelsonssoares.ecomshoppingapi.outlayers.gateways.clients.entities.Produto;
 import nelsonssoares.ecomshoppingapi.outlayers.gateways.clients.entities.Usuario;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -42,12 +44,12 @@ public class UpdateOrder {
 
         Endereco endereco = usuarioGateway.findAddressByUserId(pedidoDto.usuarioId());
         if( endereco == null ){
-            return null;
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Endereço não encontrado");
         }
 
         Usuario usuario = usuarioGateway.findById(pedidoDto.usuarioId());
         if( usuario == null ){
-            return null;
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado");
         }
 
         List<DetalhesPedido> detalhes = new ArrayList<>();

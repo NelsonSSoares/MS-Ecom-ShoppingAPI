@@ -73,30 +73,7 @@ public class GetOrdersByUserId {
                     .build());
         }
 
-//        for (Pedido pedido : pedidosAtivos) {
-//
-//
-//            List<DetalhesPedidoResponse> detalhesPedidoResponse = pedido.getDetalhesPedido().stream().map(detalhe -> DetalhesPedidoResponse.builder()
-//                    .quantidade(detalhe.getQuantidade())
-//                    .precoTotal(detalhe.getPrecoTotal())
-//                    .produto(produtoGateway.findById(detalhe.getProduto())).build()).toList();
-//
-//            System.out.println(detalhesPedidoResponse);
-//
-//            pedidos.add(PedidoResponse.builder()
-//                    .id(pedido.getId())
-//                    .dataCriacao(pedido.getDataCriacao())
-//                    .dataModificacao(pedido.getDataModificacao())
-//                    .statusPedido(pedido.getStatusPedido())
-//                    .totalPedido(pedido.getTotalPedido())
-//                    .detalhesPedido(detalhesPedidoResponse)
-//                    .usuario(usuario)
-//                    .endereco(endereco)
-//                    .build());
-//        }
-//            return pedidos;
         return pedidos;
     }
-
 
 }

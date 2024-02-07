@@ -11,7 +11,7 @@ import java.util.List;
 public interface PedidoService {
     ResponseEntity<PedidoResponse> save(PedidoDTO pedidoDto);
 
-    ResponseEntity<PedidoResponse> updateOrder(Integer id, Pedido pedido);
+    ResponseEntity<PedidoResponse> updateOrder(Integer id, PedidoDTO pedido);
 
     ResponseEntity<PedidoResponse> cancelOrder(Integer id);
 
