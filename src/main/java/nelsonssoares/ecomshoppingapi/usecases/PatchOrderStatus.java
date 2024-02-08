@@ -6,6 +6,8 @@ import nelsonssoares.ecomshoppingapi.domain.enums.StatusPedido;
 import nelsonssoares.ecomshoppingapi.domain.repositories.PedidoRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+
 @Service
 @RequiredArgsConstructor
 public class PatchOrderStatus {
@@ -18,6 +20,7 @@ public class PatchOrderStatus {
         if (pedido == null) {
             return null;
         }
+        pedido.setDataModificacao(LocalDate.now());
         pedido.setStatusPedido(status.getStatusPedido());
         return pedidoRepository.save(pedido);
     }

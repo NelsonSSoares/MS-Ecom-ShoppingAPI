@@ -26,7 +26,7 @@ public class PedidoServiceImpl implements PedidoService {
     private final PatchOrderStatus patchOrderStatus;
 
     @Override
-    @CircuitBreaker(name = "saveOrder", fallbackMethod = "saveFallback")
+    @CircuitBreaker(name = "saveOrderCB", fallbackMethod = "saveFallback")
     public ResponseEntity<PedidoResponse> save(PedidoDTO pedidoDto) {
         PedidoResponse pedido = saveOrder.executeSaveOrder(pedidoDto);
 
