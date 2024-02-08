@@ -106,7 +106,7 @@ public class GlobalExceptionHandler {
 	        error.setFields(fieldErrors);
 	      return ResponseEntity.badRequest().body(error);
 	}
-	
+
 	@ExceptionHandler(TransactionalException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public ResponseEntity<ExceptionResponse> handleITransactionException(TransactionalException e,

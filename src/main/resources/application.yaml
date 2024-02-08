@@ -6,6 +6,7 @@ eureka:
     service-url:
       defaultZone: http://localhost:8761/eureka
     fetch-registry: 'true'
+
 spring:
   profiles:
     active: dev #{PROFILE_ACTIVE}
@@ -21,8 +22,43 @@ spring:
     password: '12345'
     username: root
     url: jdbc:mysql://localhost:3306/mydb
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: admin
+    password: 123456
+
 server:
   error:
     include-stacktrace: never
     include-exception: 'false'
   port: ${PORT:0}
+
+feign:
+  user-api:
+    name: user-api #EcomUserApi
+    url: http://localhost:8765/ecommerce/usuarios/
+  product-api:
+    name: product-api #EcomProductsApi
+    url: http://localhost:8765/ecommerce/produtos/
+  endereco-api:
+    name: user-api #EcomUserApi
+    url: http://localhost:8765/ecommerce/usuarios/endereco/usuario
+
+resilience4j:
+  retry:
+    retry-aspect-order: 2
+    instances:
+      myRetry:
+        max-attempts: 3
+        wait-duration: 3s
+  circuitbreaker:
+    instances:
+      saveOrderCB:
+        minimumNumberOfCalls: 4
+        slidingWindowSize: 8
+        permittedNumberOfCallsInHalfOpenState: 3
+        automaticTransitionFromOpenToHalfOpenEnabled: true
+        waitDurationInOpenState: 5s
+        slowCallDurationThreshold: 4s
+        maxWaitDurationInHalfOpenState: 5s
