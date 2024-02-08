@@ -22,6 +22,11 @@ spring:
     password: '12345'
     username: root
     url: jdbc:mysql://localhost:3306/mydb
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: admin
+    password: 123456
 
 server:
   error:
@@ -41,6 +46,12 @@ feign:
     url: http://localhost:8765/ecommerce/usuarios/endereco/usuario
 
 resilience4j:
+  retry:
+    retry-aspect-order: 2
+    instances:
+      myRetry:
+        max-attempts: 3
+        wait-duration: 3s
   circuitbreaker:
     instances:
       saveOrderCB:
