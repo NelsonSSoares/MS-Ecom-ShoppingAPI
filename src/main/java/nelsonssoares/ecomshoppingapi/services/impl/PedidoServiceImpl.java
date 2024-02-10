@@ -15,6 +15,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static nelsonssoares.ecomshoppingapi.commons.constants.RabbitMQConstants.QUEUE_NAME;
+
 @Service
 @RequiredArgsConstructor
 public class PedidoServiceImpl implements PedidoService {
@@ -25,6 +27,7 @@ public class PedidoServiceImpl implements PedidoService {
     private final GetOrderByStatus getOrderByStatus;
     private final UpdateOrder updateOrder;
     private final PatchOrderStatus patchOrderStatus;
+    private final RabbitMQService rabbitMQService;
 
 
     @Override
@@ -72,10 +75,20 @@ public class PedidoServiceImpl implements PedidoService {
     }
 
 
+    private ResponseEntity<PedidoDTO> saveFallback(PedidoDTO pedidoDto, Throwable throwable) {
 
-    private ResponseEntity<PedidoDTO> saveFallback(PedidoDTO pedidoDto, Throwable throwable) throws JsonProcessingException {
+        System.out.println("Fallback");
+        System.out.println("Pedido: " + pedidoDto);
+        System.out.println(throwable.getMessage());
+        try {
+            System.out.println("Enviando mensagem para fila");
+            System.out.println(QUEUE_NAME + " " + pedidoDto);
+            rabbitMQService.sendMessage(QUEUE_NAME, pedidoDto);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
 
+
+        }
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(pedidoDto);
-
     }
 }
