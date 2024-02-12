@@ -62,3 +62,14 @@ resilience4j:
         waitDurationInOpenState: 5s
         slowCallDurationThreshold: 4s
         maxWaitDurationInHalfOpenState: 5s
+
+
+rabbitmq:
+  queue:
+    name: orders.v1.order-created
+  exchange:
+    name: orders.v1
+    type: direct
+    durable: true
+  routing:
+    key: pedido_routing_key

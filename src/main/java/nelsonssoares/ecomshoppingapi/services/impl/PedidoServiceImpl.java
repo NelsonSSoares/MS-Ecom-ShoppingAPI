@@ -1,21 +1,21 @@
 package nelsonssoares.ecomshoppingapi.services.impl;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.RequiredArgsConstructor;
 import nelsonssoares.ecomshoppingapi.domain.dtos.PedidoDTO;
+import nelsonssoares.ecomshoppingapi.domain.dtos.PedidoDtoMessage;
 import nelsonssoares.ecomshoppingapi.domain.dtos.PedidoResponse;
 import nelsonssoares.ecomshoppingapi.domain.entities.Pedido;
 import nelsonssoares.ecomshoppingapi.domain.enums.StatusPedido;
 import nelsonssoares.ecomshoppingapi.services.PedidoService;
+import nelsonssoares.ecomshoppingapi.services.RabbitMQService;
 import nelsonssoares.ecomshoppingapi.usecases.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-
-import static nelsonssoares.ecomshoppingapi.commons.constants.RabbitMQConstants.QUEUE_NAME;
 
 @Service
 @RequiredArgsConstructor
@@ -75,20 +75,12 @@ public class PedidoServiceImpl implements PedidoService {
     }
 
 
+
     private ResponseEntity<PedidoDTO> saveFallback(PedidoDTO pedidoDto, Throwable throwable) {
-
-        System.out.println("Fallback");
-        System.out.println("Pedido: " + pedidoDto);
+        System.out.println("Circuit Breaker is open, Fallback method called!");
         System.out.println(throwable.getMessage());
-        try {
-            System.out.println("Enviando mensagem para fila");
-            System.out.println(QUEUE_NAME + " " + pedidoDto);
-            rabbitMQService.sendMessage(QUEUE_NAME, pedidoDto);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-
-
-        }
+        System.out.println("Pedido: " + pedidoDto);
+        rabbitMQService.sendMessage(pedidoDto);
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(pedidoDto);
     }
 }
