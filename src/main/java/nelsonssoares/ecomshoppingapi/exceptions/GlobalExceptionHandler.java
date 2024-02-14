@@ -90,14 +90,14 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(NullPointerException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public ResponseEntity<ExceptionResponse> handleNullPointerException(NullPointerException e, HttpServletRequest http) {
-		
+
 		ExceptionResponse error = new ExceptionResponse();
 		error.setTimestamp(Instant.now());
 		error.setError("Argumentos ou parâmetros invalidos!");
 		error.setPath(http.getRequestURI());
 		error.setStatus(HttpStatus.BAD_REQUEST.value());
 		List<FieldError> fieldErrors = new ArrayList<>();
-		
+
 		for (FieldError fieldError : fieldErrors) {
 	         fieldError.setField("Unknown");
 	         fieldError.setMessage(e.getMessage());
