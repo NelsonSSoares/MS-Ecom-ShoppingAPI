@@ -28,5 +28,4 @@ public class RabbitMQService {
         rabbitTemplate.convertAndSend(exchange, routingKey, object);
     }
 
-
 }
