@@ -25,7 +25,6 @@ public class PedidoServiceImpl implements PedidoService {
     private final GetOrderByStatus getOrderByStatus;
     private final UpdateOrder updateOrder;
     private final PatchOrderStatus patchOrderStatus;
-    private final RabbitMQService rabbitMQService;
 
 
     @Override
@@ -75,10 +74,7 @@ public class PedidoServiceImpl implements PedidoService {
 
 
     private ResponseEntity<PedidoDTO> saveFallback(PedidoDTO pedidoDto, Throwable throwable) {
-        System.out.println("Circuit Breaker is open, Fallback method called!");
-        System.out.println(throwable.getMessage());
-        System.out.println("Pedido: " + pedidoDto);
-        rabbitMQService.sendMessage(pedidoDto);
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(pedidoDto);
+
+        return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(pedidoDto);
     }
 }
