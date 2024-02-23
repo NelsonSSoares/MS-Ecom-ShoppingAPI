@@ -22,11 +22,6 @@ spring:
     password: '12345'
     username: root
     url: jdbc:mysql://localhost:3306/mydb
-  rabbitmq:
-    host: localhost
-    port: 5672
-    username: admin
-    password: 123456
 
 server:
   error:
@@ -63,13 +58,3 @@ resilience4j:
         slowCallDurationThreshold: 4s
         maxWaitDurationInHalfOpenState: 5s
 
-
-rabbitmq:
-  queue:
-    name: orders.v1.order-created
-  exchange:
-    name: orders.v1
-    type: direct
-    durable: true
-  routing:
-    key: pedido_routing_key
