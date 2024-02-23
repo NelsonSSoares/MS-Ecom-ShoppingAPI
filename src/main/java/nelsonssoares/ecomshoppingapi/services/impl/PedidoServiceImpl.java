@@ -7,7 +7,6 @@ import nelsonssoares.ecomshoppingapi.domain.dtos.PedidoResponse;
 import nelsonssoares.ecomshoppingapi.domain.entities.Pedido;
 import nelsonssoares.ecomshoppingapi.domain.enums.StatusPedido;
 import nelsonssoares.ecomshoppingapi.services.PedidoService;
-import nelsonssoares.ecomshoppingapi.services.RabbitMQService;
 import nelsonssoares.ecomshoppingapi.usecases.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
