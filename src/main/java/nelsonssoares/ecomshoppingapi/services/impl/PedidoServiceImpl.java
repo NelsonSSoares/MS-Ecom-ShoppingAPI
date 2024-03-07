@@ -75,18 +75,11 @@ public class PedidoServiceImpl implements PedidoService {
 
 
 
-    private ResponseEntity<PedidoDTO> saveFallback(PedidoDTO pedidoDto, Throwable throwable) throws JsonProcessingException {
-        System.out.println("Circuit Breaker:" + pedidoDto);
+    public ResponseEntity<PedidoDTO> saveFallback(PedidoDTO pedidoDto, Throwable throwable) throws JsonProcessingException {
 
-        boolean sendPedido = pedidoPublisher.sendPedido(pedidoDto);
-        System.out.println("Publisher CB:" + sendPedido);
-        if (sendPedido){
+        if (pedidoPublisher.sendPedido(pedidoDto)){
             return ResponseEntity.status(HttpStatus.ACCEPTED).body(pedidoDto);
         }
-
-//        if (pedidoPublisher.sendPedido(pedidoDto)){
-//            return ResponseEntity.status(HttpStatus.ACCEPTED).body(pedidoDto);
-//        }
         return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(pedidoDto);
     }
 }
