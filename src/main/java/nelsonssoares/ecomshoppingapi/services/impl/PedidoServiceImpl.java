@@ -1,7 +1,9 @@
 package nelsonssoares.ecomshoppingapi.services.impl;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.RequiredArgsConstructor;
+import nelsonssoares.ecomshoppingapi.commons.infra.PedidoPublisher;
 import nelsonssoares.ecomshoppingapi.domain.dtos.PedidoDTO;
 import nelsonssoares.ecomshoppingapi.domain.dtos.PedidoResponse;
 import nelsonssoares.ecomshoppingapi.domain.entities.Pedido;
@@ -24,6 +26,7 @@ public class PedidoServiceImpl implements PedidoService {
     private final GetOrderByStatus getOrderByStatus;
     private final UpdateOrder updateOrder;
     private final PatchOrderStatus patchOrderStatus;
+    private final PedidoPublisher pedidoPublisher;
 
 
     @Override
@@ -72,8 +75,18 @@ public class PedidoServiceImpl implements PedidoService {
 
 
 
-    private ResponseEntity<PedidoDTO> saveFallback(PedidoDTO pedidoDto, Throwable throwable) {
+    private ResponseEntity<PedidoDTO> saveFallback(PedidoDTO pedidoDto, Throwable throwable) throws JsonProcessingException {
+        System.out.println("Circuit Breaker:" + pedidoDto);
 
+        boolean sendPedido = pedidoPublisher.sendPedido(pedidoDto);
+        System.out.println("Publisher CB:" + sendPedido);
+        if (sendPedido){
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body(pedidoDto);
+        }
+
+//        if (pedidoPublisher.sendPedido(pedidoDto)){
+//            return ResponseEntity.status(HttpStatus.ACCEPTED).body(pedidoDto);
+//        }
         return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(pedidoDto);
     }
 }
