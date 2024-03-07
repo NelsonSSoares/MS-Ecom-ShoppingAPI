@@ -1,11 +1,13 @@
 package nelsonssoares.ecomshoppingapi.outlayers.entrypoints;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import nelsonssoares.ecomshoppingapi.commons.infra.PedidoPublisher;
 import nelsonssoares.ecomshoppingapi.domain.dtos.PedidoDTO;
 import nelsonssoares.ecomshoppingapi.domain.dtos.PedidoResponse;
 import nelsonssoares.ecomshoppingapi.domain.entities.Pedido;
@@ -26,6 +28,8 @@ import static nelsonssoares.ecomshoppingapi.commons.constants.ControllerConstant
 public class PedidoController {
 
     private final PedidoService pedidoService;
+
+    private final PedidoPublisher pedidoPublisher;
 
     @Operation(summary = "Metodo para cadastrar novo Pedido", method = "POST")
     @ApiResponses(value = {
@@ -113,6 +117,5 @@ public class PedidoController {
     public ResponseEntity<Pedido> pathOrderStatus(@PathVariable("id") Integer id, @RequestBody Pedido status) {
         return pedidoService.pathOrderStatus(id, status);
     }
-
 
 }
