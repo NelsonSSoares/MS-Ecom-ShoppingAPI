@@ -18,6 +18,11 @@ spring:
       ddl-auto: update
   application:
     name: shopping-api
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: admin
+    password: 123456
   datasource:
     password: '12345'
     username: root
@@ -57,4 +62,10 @@ resilience4j:
         waitDurationInOpenState: 5s
         slowCallDurationThreshold: 4s
         maxWaitDurationInHalfOpenState: 5s
+
+mq:
+  queue:
+    create-pedido: create-pedido
+
+
 
