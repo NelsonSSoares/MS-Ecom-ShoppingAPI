@@ -51,3 +51,11 @@ dependencyManagement {
 tasks.named('test') {
     useJUnitPlatform()
 }
+
+jar {
+    manifest {
+        attributes(
+                'Main-Class': 'nelsonssoares.ecomshoppingapi.EcomShoppingApiApplication' // Substitua com o nome completo da sua classe principal
+        )
+    }
+}
